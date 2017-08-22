@@ -1,0 +1,20 @@
+{
+  "name": "todo-list-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "express-validator": "^3.2.1",
+    "jsonfile": "^3.0.1",
+    "morgan": "^1.8.2",
+    "mustache-express": "^1.2.5"
+  }
+}
