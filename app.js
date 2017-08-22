@@ -4,23 +4,11 @@ const mustacheExpress = require('mustache-express');
 const expressValidator = require('express-validator');
 const jsonfile = require('jsonfile');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
-let todoFile = './todo_list.json'
+// let todoFile = './todo_list.json'
 
-// let todos = {
-//   todos : [
-//     {id: 1, name: 'todo 1', completed: false},
-//     {id: 2, name: 'todo 2', completed: false},
-//     {id: 3, name: 'todo 3', completed: true}
-//   ]
-// }
-
-// jsonfile.writeFile(todoFile, todos, (err) => {
-//   console.log(err);
-// })
-
-// first time load the data from a file
-let todos = jsonfile.readFileSync(todoFile);
+let Todo = require('./models/todos.js');
 
 let app = express();
 
@@ -35,10 +23,18 @@ app.use(bodyParser.urlencoded({ extended: false}));
 
 app.use(expressValidator());
 
-app.all('/', (req,res,next) => {
-  console.log(req.method, req.url);
-  next();
-});
+app.get('/', (req, res, next) => {
+  Todo.find()
+    .then( (docs) => {
+      console.log('* => found all the todos');
+      console.log(docs);
+      res.send('found all todos')
+    })
+    .catch( (err) => {
+      console.error(err);
+      res.send('encountered errors')
+    })
+})
 
 app.get('/todo', (req,res) => {
   res.render('todos', todos);
