@@ -67,19 +67,19 @@ app.post('/todo', (req, res) => {
 })
 
 app.post('/todo/:id', (req, res) => {
-  console.log('need to update todo: ' + req.params.id);
-  // changed the completed flag
-  todos.todos.forEach( (todo) => {
-    if( todo.id === Number(req.params.id) ) {
-      todo.completed = true;
-    }
-  });
+  console.log('need to mark completed: ' + req.params.id);
+  let query = {'_id': req.params.id};
+  Todo.findByIdAndUpdate(
+    req.params.id,
+    { $set: { completed: true, dateCompleted: Date() }},
+    { new: true },
+    (err, doc) => {
+      console.log('Marked todo as completed');
+      console.log(doc);
+      res.redirect('/');
+    })
+});
 
-  jsonfile.writeFile(todoFile, todos, (err) => {
-    console.log(err);
-    res.redirect('/todo');
-  })
-})
 
 app.listen(3000, () => {
   console.log('Server running on 3000');

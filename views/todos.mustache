@@ -25,7 +25,7 @@
       {{#todos}}
         {{^completed}}
           <li>
-            <form class="todo-complete" action="/todo/{{id}}" method="post">
+            <form class="todo-complete" action="/todo/{{_id}}" method="post">
               <input name="todo" value="Mark Complete" type="submit"> {{text}}
             </form>
           </li>
