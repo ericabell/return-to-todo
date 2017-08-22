@@ -24,20 +24,20 @@ app.use(bodyParser.urlencoded({ extended: false}));
 app.use(expressValidator());
 
 app.get('/', (req, res, next) => {
+  res.redirect('/todo');
+})
+
+app.get('/todo', (req,res) => {
   Todo.find()
     .then( (docs) => {
       console.log('* => found all the todos');
       console.log(docs);
-      res.send('found all todos')
+      res.render('todos', {todos: docs});
     })
     .catch( (err) => {
       console.error(err);
       res.send('encountered errors')
     })
-})
-
-app.get('/todo', (req,res) => {
-  res.render('todos', todos);
 })
 
 app.post('/todo', (req, res) => {
@@ -51,12 +51,17 @@ app.post('/todo', (req, res) => {
   if( errors ){
     res.redirect('/todo');
   } else {
-    let largest = todos.todos.length;
-
-    todos.todos.push({id: largest+1, name: req.body.todo, completed: false});
-    jsonfile.writeFile(todoFile, todos, (err) => {
-      console.log(err);
-      res.redirect('/todo');
+    // create the new todo
+    let newTodo = new Todo({
+      text: req.body.todo,
+      completed: false,
+      dateCreated: Date(),
+    });
+    newTodo.save()
+    .then( (doc) => {
+      console.log('* => saved new todo to db');
+      console.log(doc);
+      res.redirect('/');
     })
   }
 })
