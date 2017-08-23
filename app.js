@@ -76,7 +76,16 @@ app.post('/todo/:id', (req, res) => {
     (err, doc) => {
       console.log('Marked todo as completed');
       console.log(doc);
-      res.redirect('/');
+      Todo.find()
+        .then( (docs) => {
+          console.log('* => found all the todos');
+          console.log(docs);
+          res.render('todos', {todos: docs});
+        })
+        .catch( (err) => {
+          console.error(err);
+          res.send('encountered errors')
+        })
     })
 });
 
